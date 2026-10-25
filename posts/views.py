@@ -1,10 +1,10 @@
 from django.db.models import Count
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, DetailView
-from django.views.generic.edit import FormMixin, CreateView
+from django.views.generic.edit import FormMixin, CreateView, UpdateView, DeleteView
 
 from comments.forms import CommentForm
-from posts.forms import SearchForm, PostCreateForm
+from posts.forms import SearchForm, PostCreateForm, PostEditForm
 from posts.models import Post
 from tags.models import Tag
 
@@ -71,3 +71,24 @@ class PostCreateView(CreateView):
 
     def get_success_url(self):
         return reverse('posts:details', kwargs={'pk': self.object.pk})
+
+
+class PostEditView(UpdateView):
+    model = Post
+    template_name = 'posts/post-edit.html'
+    form_class = PostEditForm
+
+    def get_success_url(self):
+        return reverse('posts:details', kwargs={'pk': self.object.pk})
+
+
+class PostDeleteView(DeleteView):
+    model = Post
+    template_name = 'posts/post-delete.html'
+    context_object_name = 'post'
+    success_url = reverse_lazy('posts:list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tags'] = ', '.join(t.name for t in self.object.tags.all())
+        return context

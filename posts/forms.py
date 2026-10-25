@@ -30,12 +30,15 @@ class PostCreateForm(forms.ModelForm):
         model = Post
         fields = ['image_url']
 
-    tags = forms.CharField(help_text='Enter tags separated by commas. (For example: bug, four_legs, pink)')
+    tags = forms.CharField(
+        widget=forms.Textarea(),
+        help_text='Enter tags separated by commas. (For example: bug, four_legs, pink)'
+    )
 
     def clean_tags(self):
         tags = parse_tags(self.cleaned_data['tags'])
         if not tags:
-            raise forms.ValidationError('Please enter at least one tag!')
+            raise forms.ValidationError('Enter at least one tag!')
         validate_tags(tags)
         return tags
 
@@ -50,3 +53,14 @@ class PostCreateForm(forms.ModelForm):
             post.tags.set(tags)
 
         return post
+
+
+class PostEditForm(PostCreateForm):
+    class Meta(PostCreateForm.Meta):
+        fields = []
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['tags'].widget = forms.Textarea(attrs={'rows': 3})
+        names = [tag.name for tag in self.instance.tags.all()]
+        self.initial['tags'] = ', '.join(names)

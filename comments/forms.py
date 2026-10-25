@@ -12,4 +12,9 @@ class CommentForm(ModelForm):
             'text': forms.Textarea(),
             'author': forms.TextInput()
         }
-#TODO add error messages
+
+
+class CommentEditForm(ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['text']

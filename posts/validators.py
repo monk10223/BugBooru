@@ -4,7 +4,7 @@ from django.core.validators import RegexValidator
 
 TAG_PATTERN = re.compile(r'^[a-z_]+$')
 MAX_TAGS = 30
-MAX_TAG_LENGTH = 100
+MAX_TAG_LENGTH = 50
 
 
 validate_image_url = RegexValidator(
