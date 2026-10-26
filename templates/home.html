@@ -1,10 +1,23 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BugBooru - Home</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
+    <main class="home">
+        <img src="{% static 'images/logo-white.png' %}" alt="BugBooru" class="home-logo">
+        <p class="home-motto">Every bug, tagged and found.</p>
 
+        {% include 'common/navbar.html' %}
+
+        <form method="get" action="{% url 'post-list' %}" class="home-search">
+            {{ form.query }}
+            <button type="submit">Search</button>
+        </form>
+    </main>
 </body>
 </html>

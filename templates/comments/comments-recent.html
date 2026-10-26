@@ -1,10 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block title %}Recent comments - BugBooru{% endblock %}
+
+{% block content %}
+<h2>Recent comments</h2>
+
+{% for comment in comments %}
+    <div class="comment recent-comment">
+        <a href="{% url 'post-details' comment.post_id %}">
+            <img src="{{ comment.post.image_url }}" alt="Post {{ comment.post_id }}" class="comment-thumb">
+        </a>
+        <div>
+            <p class="meta">
+                <strong>{{ comment.author }}</strong>
+                &middot; {{ comment.created_at|date:"Y-m-d H:i" }}
+                &middot; <a href="{% url 'post-details' comment.post_id %}#comment-{{ comment.pk }}">View</a>
+            </p>
+            <p>{{ comment.text }}</p>
+        </div>
+    </div>
+{% empty %}
+    <p class="meta">No comments yet.</p>
+{% endfor %}
+
+{% if is_paginated %}
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Next</a>
+        {% endif %}
+    </div>
+{% endif %}
+{% endblock %}

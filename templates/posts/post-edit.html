@@ -1,10 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block title %}Edit tags - BugBooru{% endblock %}
+
+{% block content %}
+<div class="form-card">
+    <h2>Edit tags</h2>
+
+    <img src="{{ object.image_url }}" alt="Post {{ object.pk }}" class="preview">
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save tags</button>
+        <a href="{% url 'post-details' object.pk %}">Cancel</a>
+    </form>
+</div>
+{% endblock %}

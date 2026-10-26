@@ -9,4 +9,4 @@ class Post(models.Model):
     uploaded_by = models.CharField(max_length=40, default="Anonymous")
     created_at = models.DateTimeField(auto_now_add=True)
 
-    tags = models.ManyToManyField('tags.Tag', blank=True, null=True, related_name="posts")
+    tags = models.ManyToManyField('tags.Tag', related_name="posts")

@@ -12,9 +12,24 @@ class CommentForm(ModelForm):
             'text': forms.Textarea(),
             'author': forms.TextInput()
         }
+        labels = {'author': 'Name', 'text': 'Message'}
+        error_messages = {
+            'text': {'required': 'Write a message.'},
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['author'].required = False
+
+    def clean_author(self):
+        return self.cleaned_data['author'].strip() or 'Anonymous'
 
 
 class CommentEditForm(ModelForm):
     class Meta:
         model = Comment
-        fields = ['text']
+        fields = ['text', 'author']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['author'].disabled = True

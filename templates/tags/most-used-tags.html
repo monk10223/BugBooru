@@ -1,10 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block title %}Top tags - BugBooru{% endblock %}
+
+{% block content %}
+<h2>Top tags</h2>
+
+<table class="tags-table">
+    <thead>
+        <tr>
+            <th>Rank</th>
+            <th>Tag</th>
+            <th>Posts</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for tag in tags %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td><a href="{% url 'post-list' %}?query={{ tag.name|urlencode }}">{{ tag.name }}</a></td>
+                <td>{{ tag.post_count }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="3">No tags yet.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

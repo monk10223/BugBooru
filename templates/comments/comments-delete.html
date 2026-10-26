@@ -1,10 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block title %}Delete comment - BugBooru{% endblock %}
+
+{% block content %}
+<div class="form-card">
+    <h2>Delete this comment?</h2>
+
+    <p class="meta">
+        By <strong>{{ comment.author }}</strong>
+        &middot; {{ comment.created_at|date:"Y-m-d H:i" }}
+    </p>
+    <p>{{ comment.text }}</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="danger">Yes, delete</button>
+        <a href="{% url 'post-details' comment.post_id %}">Cancel</a>
+    </form>
+</div>
+{% endblock %}

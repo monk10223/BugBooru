@@ -1,5 +1,7 @@
+from typing import Any
+
 from django.urls import reverse
-from django.views.generic import UpdateView, DeleteView
+from django.views.generic import UpdateView, DeleteView, ListView
 
 from comments.forms import CommentEditForm
 from comments.models import Comment
@@ -12,7 +14,7 @@ class CommentEditView(UpdateView):
     form_class = CommentEditForm
 
     def get_success_url(self):
-        return reverse('posts:details', kwargs={'pk': self.object.pk})
+        return reverse('post-details', kwargs={'pk': self.object.post_id})
 
 
 class CommentDeleteView(DeleteView):
@@ -21,4 +23,15 @@ class CommentDeleteView(DeleteView):
     context_object_name = 'comment'
 
     def get_success_url(self):
-        return reverse('posts:details', kwargs={'pk': self.object.pk})
+        return reverse('post-details', kwargs={'pk': self.object.post_id})
+
+
+class RecentCommentsView(ListView):
+    model = Comment
+    template_name = 'comments/comments-recent.html'
+    context_object_name = 'comments'
+    ordering = '-created_at'
+    paginate_by = 20
+
+    def get_queryset(self):
+        return super().get_queryset().select_related('post')

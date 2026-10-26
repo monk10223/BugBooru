@@ -1,10 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block title %}Posts - BugBooru{% endblock %}
+
+{% block content %}
+<div class="layout">
+    <aside class="sidebar">
+        <form method="get" action="{% url 'post-list' %}" class="sidebar-search">
+            <input type="text" name="query" value="{{ request.GET.query }}" placeholder="tag1, tag2">
+            <button type="submit">Search</button>
+        </form>
+
+        <h3>Tags</h3>
+        {% for tag in sidebar_tags %}
+            <div>
+                <a href="?query={{ tag.name|urlencode }}">{{ tag.name }}</a>
+                <span class="count">{{ tag.post_count }}</span>
+            </div>
+        {% empty %}
+            <p>No tags.</p>
+        {% endfor %}
+    </aside>
+
+    <div class="content">
+        <main class="thumbs">
+            {% for post in posts %}
+                <a href="{% url 'post-details' post.pk %}">
+                    <img src="{{ post.image_url }}" alt="Post {{ post.pk }}">
+                </a>
+            {% empty %}
+                <p>No posts found.</p>
+            {% endfor %}
+        </main>
+
+        {% if is_paginated %}
+            <div class="pagination">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.query %}&query={{ request.GET.query|urlencode }}{% endif %}">Previous</a>
+                {% endif %}
+
+                <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}{% if request.GET.query %}&query={{ request.GET.query|urlencode }}{% endif %}">Next</a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

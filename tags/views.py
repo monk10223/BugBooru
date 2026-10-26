@@ -13,6 +13,6 @@ class MostUsedTagsView(ListView):
     def get_queryset(self):
         return (
             Tag.objects
-            .annotate(post_count=Count('post'))
-            .order_by('-post_count')[:30]
+            .annotate(post_count=Count('posts'))
+            .order_by('-post_count', 'name')[:30]
         )

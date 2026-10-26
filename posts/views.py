@@ -15,6 +15,7 @@ class PostListView(ListView):
     template_name = 'posts/posts.html'
     context_object_name = 'posts'
     ordering = '-created_at'
+    paginate_by = 30
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -43,7 +44,7 @@ class PostDetailView(FormMixin, DetailView):
     form_class = CommentForm
 
     def get_success_url(self):
-        return reverse('posts:details', kwargs={'pk': self.object.pk})
+        return reverse('post-details', kwargs={'pk': self.object.pk})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -70,7 +71,7 @@ class PostCreateView(CreateView):
     form_class = PostCreateForm
 
     def get_success_url(self):
-        return reverse('posts:details', kwargs={'pk': self.object.pk})
+        return reverse('post-details', kwargs={'pk': self.object.pk})
 
 
 class PostEditView(UpdateView):
@@ -79,14 +80,14 @@ class PostEditView(UpdateView):
     form_class = PostEditForm
 
     def get_success_url(self):
-        return reverse('posts:details', kwargs={'pk': self.object.pk})
+        return reverse('post-details', kwargs={'pk': self.object.pk})
 
 
 class PostDeleteView(DeleteView):
     model = Post
     template_name = 'posts/post-delete.html'
     context_object_name = 'post'
-    success_url = reverse_lazy('posts:list')
+    success_url = reverse_lazy('post-list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

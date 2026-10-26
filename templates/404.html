@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Page not found - BugBooru{% endblock %}
+
+{% block content %}
+<div class="form-card">
+    <h2>404 - Page not found</h2>
+    <p>The page you're looking for doesn't exist or has been removed.</p>
+    <p>
+        <a href="{% url 'home' %}">Go to the homepage</a> or
+        <a href="{% url 'post-list' %}">browse posts</a>.
+    </p>
+</div>
+{% endblock %}
